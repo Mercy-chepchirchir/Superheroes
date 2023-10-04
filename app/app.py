@@ -20,10 +20,23 @@ api = Api(app)
 class Home(Resource):
     def get(self):
         response_message = {
-            "message": "WELCOME TO THE PIZZA RESTAURANT API."
+            "message": "WELCOME TO THE SUPER HEROES API."
         }
         return make_response(response_message, 200)
 
 
 api.add_resource(Home, '/')
+
+class Heroes(Resource):
+    def get(self):
+        heroes = []
+        for hero  in Hero.query.all():
+            hero_dict={
+                "id": hero.id,
+                "name": hero.name,
+                "super_name": hero.super_name,
+            }
+            heroes.append(hero_dict)
+        return make_response(jsonify(heroes), 200)
+api.add_resource(Heroes, '/heroes')
 
