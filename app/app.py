@@ -173,3 +173,13 @@ class PowerByID(Resource):
             return make_response(jsonify({"error": "Power not found"}), 404)
 
 api.add_resource(PowerByID, '/powers/<int:id>')
+class Hero_Powers(Resource):
+    def post(self):
+        data = request.get_json()
+
+       # Validate that the required fields(strength,power_id and hero_id) are present in the request
+        required_fields = ["strength", "power_id", "hero_id"]
+        if not all(key in data for key in required_fields):
+            return make_response(jsonify({"errors": ["Validation errors"]}), 400)
+
+        
