@@ -182,4 +182,11 @@ class Hero_Powers(Resource):
         if not all(key in data for key in required_fields):
             return make_response(jsonify({"errors": ["Validation errors"]}), 400)
 
+        # Check if the Hero and Power exist
+        hero = Hero.query.get(data['hero_id'])
+        power = Power.query.get(data['power_id'])
+
+        if not hero or not power:
+            return make_response(jsonify({"errors": ["Validation errors"]}), 400)
+
         
