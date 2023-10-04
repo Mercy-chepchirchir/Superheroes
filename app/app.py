@@ -153,4 +153,23 @@ class PowerByID(Resource):
         else:
             return make_response(jsonify({"error": "Power not found"}), 404)
         
-    
+    def patch(self,id):
+        power = Power.query.filter_by(id=id).first()
+        data = request.get_json()
+        if power:
+            for attr in data:
+                   setattr(power, attr, data[attr])
+            
+            db.session.add(power)
+            db.session.commit()
+            power_dict={
+                "id": power.id,
+                "name": power.name,
+                "description": power.description,
+                
+            }
+            return make_response(power_dict, 200)
+        else:
+            return make_response(jsonify({"error": "Power not found"}), 404)
+
+api.add_resource(PowerByID, '/powers/<int:id>')
