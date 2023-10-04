@@ -189,4 +189,33 @@ class Hero_Powers(Resource):
         if not hero or not power:
             return make_response(jsonify({"errors": ["Validation errors"]}), 400)
 
-        
+        # Create a new HeroPower
+        hero_power = Hero_Powers(
+            strength=data["strength"],
+            hero_id=data["hero_id"],
+            power_id=data["power_id"]
+        )
+
+        db.session.add(hero_power)
+        db.session.commit()
+
+        hero_data={
+               "id": hero.id,
+                "name": hero.name,
+                "super_name": hero.super_name,
+                "powers":[
+                    {
+                        "id": hero_power.power.id,
+                        "name": hero_power.power.name,
+                        "description": hero_power.power.description,
+                    }
+                    for hero_power in hero.powers
+                ]
+            
+        }
+        return make_response(jsonify(hero_data), 201)
+
+api.add_resource(Hero_Powers,'/hero_powers')   
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
